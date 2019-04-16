@@ -1,0 +1,18 @@
+<?php $result = $block->getFileContent(); ?>
+
+<?php if (isset($result['download'])): ?>
+    <div class="button-container">
+        <a class="abs-action-primary abs-action-l" href="javascript:void(0)" title="<?= __('Reload') ?>"
+            onClick="window.location.reload();return false;">
+            <?= __('Reload') ?>
+        </a>
+        <a class="abs-action-primary abs-action-l" href="<?= $result['download'] ?>" title="<?= __('Download') ?>"><?= __('Download') ?></a>
+    </div>
+<?php endif; ?>
+<div style="border: 4px solid #dfdfdf; overflow: hidden; height: 510px; padding: 5px; margin-top: 10px">
+    <div id="log_data"
+         style="width:100%;height:500px;overflow:auto;margin:0;padding:3px;background:black;color:#2EC029;
+                font:normal 11px Lucida Console, Courier New, serif;">
+        <?= /* @noEscape */ isset($result['content']) ? $result['content'] : ''; ?>
+    </div>
+</div>

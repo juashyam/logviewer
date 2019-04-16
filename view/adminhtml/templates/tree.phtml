@@ -1,0 +1,213 @@
+<?php if ($treeJson = $block->getTreeJson()): ?>
+    <div class="tree-holder">
+        <div id="tree-div" class="tree-wrapper"></div>
+    </div>
+
+    <script>
+        var tree;
+        require([
+            "jquery",
+            'Magento_Ui/js/modal/modal',
+            "jquery/ui",
+            "prototype",
+            "extjs/ext-tree-checkbox",
+            "mage/adminhtml/form",
+            "mage/translate"
+        ], function (jQuery, modal) {
+            /**
+             * Fix ext compatibility with prototype 1.6
+             */
+            Ext.lib.Event.getTarget = function (e) {
+                var ee = e.browserEvent || e;
+                return ee.target ? Event.element(ee) : null;
+            };
+
+            Ext.tree.TreePanel.Enhanced = function (el, config) {
+                Ext.tree.TreePanel.Enhanced.superclass.constructor.call(this, el, config);
+            };
+
+            Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {
+                loadTree: function (config, firstLoad) {
+                    var parameters = config['parameters'];
+                    var data = config['data'];
+
+                    if ((typeof parameters['root_visible']) != 'undefined') {
+                        this.rootVisible = parameters['root_visible'] * 1;
+                    }
+
+                    var root = new Ext.tree.TreeNode(parameters);
+
+                    this.setRootNode(root);
+                    this.modal = modal;
+
+                    if (firstLoad) {
+                        this.addListener('click', this.categoryClick);
+                    }
+
+
+                    this.loader.buildCategoryTree(root, data);
+                    this.el.dom.innerHTML = '';
+
+                    // render the tree
+                    this.render();
+                    if (parameters['expanded']) {
+                        this.expandAll();
+                    } else {
+                        root.expand();
+                    }
+
+                    console.log(parameters['id']);
+                    var selectedNode = this.getNodeById(parameters['id']);
+                    if (selectedNode) {
+                        this.currentNodeId = parameters['id'];
+                    } else {
+                        if (parameters['parent'] > 0 && parameters['id'] === 0) {
+                            this.currentNodeId = parameters['parent'];
+                        }
+                    }
+                    this.selectCurrentNode();
+                },
+
+                selectCurrentNode: function () {
+                    var selectedNode = this.getNodeById(this.currentNodeId);
+
+                    if (selectedNode) {
+                        if ((typeof selectedNode.attributes.path) != 'undefined') {
+                            var path = selectedNode.attributes.path;
+                            if (!this.storeId) {
+                                path = '0/' + path;
+                            }
+                            this.selectPath(path);
+                        } else {
+                            this.getSelectionModel().select(selectedNode);
+                        }
+                    }
+                },
+
+                collapseTree: function () {
+                    this.collapseAll();
+                },
+
+                expandTree: function () {
+                    this.expandAll();
+                },
+
+                categoryClick: function (node, e) {
+                    if (node.childNodes.length) {
+                        if (node.expanded) {
+                            node.collapse(true);
+                        } else {
+                            node.expand(true);
+                        }
+                        return;
+                    }
+
+                    var url = this.buildUrl(node.id);
+
+                    this.currentNodeId = node.id;
+                    if (!this.useAjax) {
+                        setLocation(url);
+                        return;
+                    }
+                },
+
+                buildUrl: function (id) {
+                    var urlExt = 'file/' + id;
+
+                    return parseSidUrl(this.baseUrl, urlExt);
+                },
+
+                getBaseUrl: function () {
+                    return this.baseUrl;
+                }
+            });
+
+            function renderNewTree(config, newTreeParams) {
+                if (tree) {
+                    tree.purgeListeners();
+                    tree.el.dom.innerHTML = '';
+                }
+                tree = new Ext.tree.TreePanel.Enhanced('tree-div', newTreeParams);
+
+                tree.loadTree(config, true);
+
+                // try to select current category
+                var selectedNode = tree.getNodeById(config.parameters.id);
+                if (selectedNode) {
+                    tree.currentNodeId = config.parameters.id;
+                }
+                tree.selectCurrentNode();
+            }
+
+            jQuery(function () {
+                categoryLoader = new Ext.tree.TreeLoader();
+
+                categoryLoader.buildCategoryTree = function (parent, config) {
+                    if (!config) return null;
+
+                    if (parent && config && config.length) {
+                        for (var i = 0; i < config.length; i++) {
+                            var node;
+                            var _node = Object.clone(config[i]);
+                            if (_node.children && !_node.children.length) {
+                                delete(_node.children);
+                                node = new Ext.tree.AsyncTreeNode(_node);
+                            } else {
+                                node = new Ext.tree.TreeNode(config[i]);
+                            }
+                            parent.appendChild(node);
+                            node.loader = node.getOwnerTree().loader;
+                            if (_node.children) {
+                                this.buildCategoryTree(node, _node.children);
+                            }
+                        }
+                    }
+                };
+
+                categoryLoader.on("beforeload", function (treeLoader, node) {
+                    treeLoader.baseParams.id = node.attributes.id;
+                    treeLoader.baseParams.store = node.attributes.store;
+                    treeLoader.baseParams.form_key = FORM_KEY;
+                });
+
+                categoryLoader.on("load", function (treeLoader, node, config) {
+                    //varienWindowOnload();
+                });
+
+                scopeSwitcherHandler = renderNewTree;
+
+                var newTreeParams = {
+                    animate: false,
+                    loader: categoryLoader,
+                    enableDD: true,
+                    containerScroll: true,
+                    selModel: new Ext.tree.CheckNodeMultiSelectionModel(),
+                    rootVisible: false,
+                    useAjax: false,
+                    switchTreeUrl: '<?= /* @escapeNotVerified */ $block->getSwitchTreeUrl() ?>',
+                    editUrl: '<?= /* @escapeNotVerified */ $block->getFileViewUrl() ?>',
+                    currentNodeId: '<?= /* @escapeNotVerified */ $block->getCurrentFileId() ?>',
+                    baseUrl: '<?= /* @escapeNotVerified */ $block->getFileViewUrl() ?>'
+                };
+
+                var defaultLoadTreeParams = {
+                    parameters: {
+                        text: <?= /* @escapeNotVerified */ json_encode(htmlentities('System Log')) ?>,
+                        draggable: false,
+                        allowDrop: false,
+                        id: '<?= /* @escapeNotVerified */ $block->getCurrentFileId() ?>',
+                        expanded: false,
+                        store_id: 1,
+                        category_id: 1,
+                        parent: null
+                    },
+                    data: <?= /* @escapeNotVerified */ $treeJson ?>
+                };
+
+                renderNewTree(defaultLoadTreeParams, newTreeParams);
+            });
+        });
+    </script>
+<?php else: ?>
+    <p><?= __('We can\'t find any system log.') ?></p>
+<?php endif; ?>

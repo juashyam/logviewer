@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * This file is part of the juashyam/logviewer library
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * @copyright Copyright (c) Shyam Kumar <kumar.30.shyam@gmail.com>
+ * @license http://opensource.org/licenses/MIT MIT
+ * @link https://packagist.org/packages/juashyam/logviewer Packagist
+ * @link https://github.com/juashyam/logviewer GitHub
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+    <router id="admin">
+        <route id="lviewer" frontName="lviewer">
+            <module name="Juashyam_LogViewer" before="Magento_Backend" />
+        </route>
+    </router>
+</config>

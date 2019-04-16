@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * This file is part of the juashyam/logviewer library
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * @copyright Copyright (c) Shyam Kumar <kumar.30.shyam@gmail.com>
+ * @license http://opensource.org/licenses/MIT MIT
+ * @link https://packagist.org/packages/juashyam/logviewer Packagist
+ * @link https://github.com/juashyam/logviewer GitHub
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Juashyam_LogViewer::system_log_report"
+             title="System Messages and Errors"
+             translate="title"
+             module="Juashyam_LogViewer"
+             sortOrder="80" parent="Magento_Backend::system"
+             dependsOnModule="Juashyam_LogViewer"
+             resource="Juashyam_LogViewer::system_log_report"/>
+        <add id="Juashyam_LogViewer::system_log"
+             title="Log"
+             translate="title"
+             module="Juashyam_LogViewer"
+             sortOrder="10"
+             parent="Juashyam_LogViewer::system_log_report"
+             action="lviewer/log/view/"
+             resource="Juashyam_LogViewer::system_log"/>
+        <add id="Juashyam_LogViewer::system_report"
+             title="Report"
+             translate="title"
+             module="Juashyam_LogViewer"
+             sortOrder="20"
+             parent="Juashyam_LogViewer::system_log_report"
+             action="lviewer/report/view/"
+             resource="Juashyam_LogViewer::system_report"/>
+    </menu>
+</config>
+
