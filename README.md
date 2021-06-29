@@ -1,6 +1,10 @@
-# Magento 2 Log and Report Viewer
+![Log Viewer](https://user-images.githubusercontent.com/13532448/123785726-816eaa80-d8f6-11eb-801c-47aa8596a5e6.png)
 
-A simple Magento 2 module which allows all the system logs (**`var/log`**) and system reports (**`var/report`**) to be viewed and downloaded via **`System > System Messages and Errors`** in the admin.
+[![Latest Stable Version](http://poser.pugx.org/juashyam/logviewer/v)](https://packagist.org/packages/juashyam/logviewer)
+[![Total Downloads](http://poser.pugx.org/juashyam/logviewer/downloads)](https://packagist.org/packages/juashyam/logviewer)
+[![License](http://poser.pugx.org/juashyam/logviewer/license)](https://packagist.org/packages/juashyam/logviewer)
+
+A simple Magento 2 module to view system logs (**`var/log`**) and system reports (**`var/report`**) in the Admin.
 
 ## Installation
 
@@ -18,6 +22,8 @@ php bin/magento setup:upgrade
 
 
 ## Preview
+
+> Admin → System → System Messages and Errors
 
 ##### System Log(s) in backend
 ![System Log](https://user-images.githubusercontent.com/13532448/56204450-23cb4c00-6065-11e9-865d-c5a6b2f18073.png)
