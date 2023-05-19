@@ -61,7 +61,7 @@ class Index extends Action implements HttpGetActionInterface
      * @throws FileSystemException
      * @throws Exception
      */
-    public function execute():ResponseInterface|ResultInterface
+    public function execute()
     {
         if ($encodedFileName = $this->_request->getParam($this->config->getQueryParameter())) {
             $fileName = base64_decode($encodedFileName);
