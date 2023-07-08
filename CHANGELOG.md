@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.0.1] - 2023-07-08
+### Added
+- Compatible with PHP 8.1.x
+
 ## [1.0.0] - 2019-04-16
 ### Added
 - Shows all log and report files recursively in a tree
