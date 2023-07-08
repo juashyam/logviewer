@@ -12,6 +12,7 @@
  */
 namespace Juashyam\LogViewer\Block\Adminhtml;
 
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\FileSystemException as FileSystemExceptionAlias;
 
 /**

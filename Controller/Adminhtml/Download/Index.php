@@ -12,13 +12,19 @@
  */
 namespace Juashyam\LogViewer\Controller\Adminhtml\Download;
 
+use Exception;
 use Juashyam\LogViewer\Model\Config;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\ResponseInterface as ResponseInterfaceAlias;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Filesystem\DirectoryList;
 
 /**
@@ -27,37 +33,23 @@ use Magento\Framework\Filesystem\DirectoryList;
  */
 class Index extends Action implements HttpGetActionInterface
 {
-    /**
-     * @var FileFactory
-     */
-    private $downloader;
+    private FileFactory $downloader;
 
-    /**
-     * @var DirectoryList
-     */
-    private $directory;
-
-    /**
-     * @var Config
-     */
-    private $config;
+    private Config $config;
 
     /**
      * Add category constructor
      *
      * @param Context $context
      * @param FileFactory $fileFactory
-     * @param DirectoryList $directory
      * @param Config $config
      */
     public function __construct(
         Context $context,
         FileFactory $fileFactory,
-        DirectoryList $directory,
         Config $config
     ) {
         $this->downloader = $fileFactory;
-        $this->directory = $directory;
         $this->config = $config;
         parent::__construct($context);
     }
@@ -65,8 +57,9 @@ class Index extends Action implements HttpGetActionInterface
     /**
      * Add new category form
      *
-     * @return ResponseInterfaceAlias
+     * @return ResponseInterfaceAlias|ResultInterface
      * @throws FileSystemException
+     * @throws Exception
      */
     public function execute()
     {
@@ -79,5 +72,11 @@ class Index extends Action implements HttpGetActionInterface
                 file_get_contents($file)
             );
         }
+
+        /** @var Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        $resultRedirect->setRefererUrl();
+
+        return $resultRedirect;
     }
 }
