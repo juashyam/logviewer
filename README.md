@@ -1,10 +1,8 @@
 ![Log Viewer](https://user-images.githubusercontent.com/13532448/123785726-816eaa80-d8f6-11eb-801c-47aa8596a5e6.png)
 
-[![Latest Stable Version](http://poser.pugx.org/juashyam/logviewer/v)](https://packagist.org/packages/juashyam/logviewer)
-[![Total Downloads](http://poser.pugx.org/juashyam/logviewer/downloads)](https://packagist.org/packages/juashyam/logviewer)
-[![License](http://poser.pugx.org/juashyam/logviewer/license)](https://packagist.org/packages/juashyam/logviewer)
-
 A simple Magento 2 module to view system logs (**`var/log`**) and system reports (**`var/report`**) in the Admin.
+
+<a href="https://www.buymeacoffee.com/juashyam" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
 
 ## Installation
 
@@ -38,3 +36,5 @@ php bin/magento setup:upgrade
 ## License
 
 This project is licensed under the MIT License
+
+<a href="https://www.buymeacoffee.com/juashyam" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
